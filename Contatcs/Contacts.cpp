@@ -12,7 +12,7 @@ struct Contact {
     int age;
 };
 
-vector<Contact> contacts;
+vector<Contact> contacts; //vector<Contact> contacts; 的意思是声明一个名为 contacts 的动态数组（向量）,用于存储多个 Contact 结构体的实例。
 
 void showMenu() 
 {
@@ -27,7 +27,8 @@ void showMenu()
 	cout << "******************************" << endl;
 }
 
-bool validateInput() {
+bool validateInput() //输入验证函数
+{
     if (cin.fail()) {
         cin.clear(); // 清除错误标志
         cin.ignore(numeric_limits<streamsize>::max(), '\n'); // 忽略输入缓冲区中的内容
@@ -75,13 +76,14 @@ void addContact() {
         }
         cout << "Invalid input. Please enter 1 or 2" << endl;
     }
-	contacts.push_back(newContact);
+	contacts.push_back(newContact);//将 newContact 对象添加到 contacts 向量的末尾
 	cout << "Contact added successfully!" << endl;
 }
 
 void showContacts() {
 	cout << "Contacts List:" << endl;
-	for (const auto& contact : contacts) {
+	for (const auto& contact : contacts)//一种范围基于的for循环，用于遍历 contacts 向量中的每个元素。
+    {
 		cout << "Name: " << contact.name << ", Age: " << contact.age << endl
             << "gender: " << contact.gender << endl 
             << "Phone: " << contact.phone  << endl
