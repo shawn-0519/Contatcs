@@ -131,6 +131,40 @@ void deleteContact() {
     }
 }
 
+void findContact() {
+    if (contacts.empty()) {
+        cout << "No contacts available to find." << endl;
+        return;
+    }
+
+    string nameToFind;
+    cout << "Enter the name of the contact you want to find: ";
+    cin >> nameToFind;
+
+    auto it = contacts.begin();  // 使用迭代器遍历联系人列表。contacts.begin()返回的是一个指向 Contact 元素的迭代器。
+    bool found = false;
+
+    while (it != contacts.end())
+    {
+        if (it->name == nameToFind) //it 是一个指向 Contact 对象的迭代器。通过 -> 访问迭代器指向的 Contact 对象的 name 字段
+        {
+            found = true;
+            cout << "name: " << it->name << " age: " << it->age << endl 
+                << "gender: " << it->gender << endl
+                << "phone: " << it->phone << endl
+                << "addr: " << it->addr << endl;
+            break;
+        }
+        else {
+            ++it;  // 继续查找下一个联系人
+        }
+    }
+
+    if (!found) {
+        cout << "Contact not found." << endl;
+    }
+}
+
 
 int main()
 {
@@ -157,8 +191,7 @@ int main()
             deleteContact();
             break;
         case 4:
-            // 查找联系人功能待实现
-            cout << "Find Contact functionality not implemented." << endl;
+            findContact();
             break;
         case 5:
             // 编辑联系人功能待实现
