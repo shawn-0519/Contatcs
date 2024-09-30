@@ -4,15 +4,15 @@ using namespace std;
 
 void showMenu() 
 {
-	cout << "*************************" << endl;
-	cout << "***** 1、添加联系人 *****" << endl;
-	cout << "***** 2、显示联系人 *****" << endl;
-	cout << "***** 3、删除联系人 *****" << endl;
-	cout << "***** 4、查找联系人 *****" << endl;
-	cout << "***** 5、修改联系人 *****" << endl;
-	cout << "***** 6、清空联系人 *****" << endl;
-	cout << "***** 0、退出通讯录 *****" << endl;
-	cout << "*************************" << endl;
+	cout << "******************************" << endl;
+	cout << "***** 1、Add	Contact  *****" << endl;
+	cout << "***** 2、Show	Contacts *****" << endl;
+	cout << "***** 3、Delete	Contact  *****" << endl;
+	cout << "***** 4、Find	Contact  *****" << endl;
+	cout << "***** 5、Edit	Contact  *****" << endl;
+	cout << "***** 6、Clear	Contacts *****" << endl;
+	cout << "***** 0、Exti	Contacts *****" << endl;
+	cout << "******************************" << endl;
 }
 
 int main()
