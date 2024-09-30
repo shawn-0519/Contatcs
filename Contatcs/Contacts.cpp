@@ -81,14 +81,54 @@ void addContact() {
 }
 
 void showContacts() {
-	cout << "Contacts List:" << endl;
-	for (const auto& contact : contacts)//一种范围基于的for循环，用于遍历 contacts 向量中的每个元素。
+    if (contacts.empty()) {
+        cout << "No contacts available." << endl;
+    }
+    else 
     {
-		cout << "Name: " << contact.name << ", Age: " << contact.age << endl
-            << "gender: " << contact.gender << endl 
-            << "Phone: " << contact.phone  << endl
-			<< "Address: " << contact.addr << endl;
-	}
+        cout << "Contacts List:" << endl << endl;
+        for (const auto& contact : contacts)//一种范围基于的for循环，用于遍历 contacts 向量中的每个元素。
+        {
+            cout << "Name: " << contact.name << ", Age: " << contact.age << endl
+                << "gender: " << contact.gender << endl
+                << "Phone: " << contact.phone << endl
+                << "Address: " << contact.addr << endl << endl;
+        }
+
+    }
+
+}
+
+void deleteContact() {
+    if (contacts.empty()) {
+        cout << "No contacts available to delete." << endl;
+        return;
+    }
+
+    string nameToDelete;
+    cout << "Enter the name of the contact you want to delete: ";
+    cin >> nameToDelete;
+
+    auto it = contacts.begin();  // 使用迭代器遍历联系人列表。contacts.begin()返回的是一个指向 Contact 元素的迭代器。
+    bool found = false;
+
+    while (it != contacts.end()) 
+    {
+        if (it->name == nameToDelete) //it 是一个指向 Contact 对象的迭代器。通过 -> 访问迭代器指向的 Contact 对象的 name 字段
+        {
+            found = true;
+            it = contacts.erase(it);  // 删除联系人并更新迭代器。erase 函数从 contacts 向量中删除由迭代器 it 指向的联系人，并返回一个指向下一个元素的迭代器。这样可以确保删除后继续正确遍历剩余的联系人。
+            cout << "Contact deleted successfully." << endl;
+            break;
+        }
+        else {
+            ++it;  // 继续查找下一个联系人
+        }
+    }
+
+    if (!found) {
+        cout << "Contact not found." << endl;
+    }
 }
 
 
@@ -113,9 +153,8 @@ int main()
         case 2:
             showContacts();
             break;
-        case 3:
-            // 删除联系人功能待实现
-            cout << "Delete Contact functionality not implemented." << endl;
+        case 3: 
+            deleteContact();
             break;
         case 4:
             // 查找联系人功能待实现
