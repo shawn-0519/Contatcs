@@ -165,6 +165,98 @@ void findContact() {
     }
 }
 
+void editContact() {
+    if (contacts.empty()) {
+        cout << "No contacts available to find." << endl;
+        return;
+    }
+
+    string nameToEdit;
+    cout << "Enter the name of the contact you want to edit: ";
+    cin >> nameToEdit;
+
+    bool found = false;
+
+    // 遍历联系人列表查找
+    for (auto& contact : contacts) {
+        if (contact.name == nameToEdit) {
+            found = true;
+            cout << "Editing contact: " << contact.name << endl;
+
+            // 修改姓名
+            cout << "Enter new name (or press Enter to keep current): ";
+            cin.ignore();
+            string newName;
+            getline(cin, newName);
+            if (!newName.empty()) contact.name = newName;
+
+            // 修改电话，循环验证输入是否为数字
+            while (true) {
+                cout << "Enter new phone (or press Enter to keep current): ";
+                string newPhone;
+                getline(cin, newPhone);
+
+                if (newPhone.empty()) {
+                    break;  // 按 Enter，保持当前电话
+                }
+
+                // 检查电话输入是否为纯数字
+                bool validPhone = true;
+                for (char c : newPhone) //它遍历 newPhone 字符串的每一个字符
+                {
+                    if (!isdigit(c)) //通过 isdigit(c) 检查每个字符是否为数字，确保用户输入的电话只包含数字。
+                    {
+                        validPhone = false;
+                        break;
+                    }
+                }
+
+                if (validPhone) {
+                    contact.phone = newPhone;
+                    break;  // 输入合法，退出循环
+                }
+                else {
+                    cout << "Invalid phone number. Please enter only numbers." << endl;
+                }
+            }
+
+            // 修改地址
+            cout << "Enter new address (or press Enter to keep current): ";
+            string newAddr;
+            getline(cin, newAddr);
+            if (!newAddr.empty()) contact.addr = newAddr;
+
+            // 修改性别，循环直到输入正确
+            while (true) {
+                cout << "Enter new gender (1 for male, 2 for female, or press Enter to keep current): ";
+                string genderInput;
+                getline(cin, genderInput);
+                if (genderInput.empty()) {
+                    break;  // 按 Enter，保持当前性别
+                }
+                if (genderInput == "1") {
+                    contact.gender = "male";
+                    break;
+                }
+                else if (genderInput == "2") {
+                    contact.gender = "female";
+                    break;
+                }
+                else {
+                    cout << "Invalid input. Please enter 1 for male or 2 for female." << endl;
+                }
+            }
+
+            cout << "Contact updated successfully!" << endl;
+            break;
+        }
+    }
+
+    if (!found) {
+        cout << "Contact not found." << endl;
+    }
+}
+
 
 int main()
 {
@@ -175,7 +267,7 @@ int main()
         showMenu();
         cin >> select;
 
-        if (!validateInput()) //输入是否是数字
+        if (!validateInput()) //输入检测
         {
             continue;
         }
@@ -194,8 +286,7 @@ int main()
             findContact();
             break;
         case 5:
-            // 编辑联系人功能待实现
-            cout << "Edit Contact functionality not implemented." << endl;
+            editContact();
             break;
         case 6:
             // 清空联系人功能待实现
