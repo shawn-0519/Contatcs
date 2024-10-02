@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include <limits>
+#include <algorithm>
+
 using namespace std;
 
 struct Contact {
@@ -59,6 +61,8 @@ const string prompts[2][6] = {
     }
 };
 
+
+
 // 验证输入是否为数字
 bool validateInput() {
     if (cin.fail()) {
@@ -70,6 +74,31 @@ bool validateInput() {
     return true;
 }
 
+// 输入或修改性别的函数
+void getGender(Contact& contact) {
+    while (true) {
+        cout << (language == 0 ? "请输入性别 (1: 男, 2: 女): " : "Enter gender (1: male, 2: female): ");
+        int gender = 0;
+        while (true) {
+            cin >> gender;
+            if (!validateInput()) {
+                continue;
+            }
+            if (gender == 1) {
+                contact.gender = language == 0 ? "男" : "male";
+                break;
+            }
+            else if (gender == 2) {
+                contact.gender = language == 0 ? "女" : "female";
+                break;
+            }
+            cout << (language == 0 ? "无效输入，请输入1或2。" : "Invalid input. Please enter 1 or 2.") << endl;
+        }
+        break;  // 输入有效，退出循环
+    }
+}
+
+
 // 显示菜单
 void showMenu() {
     cout << "******************************" << endl;
@@ -79,6 +108,9 @@ void showMenu() {
     cout << "******************************" << endl;
 }
 
+//bool isValidPhone(const string& phone) {
+//    return all_of(phone.begin(), phone.end(), ::isdigit);  // 使用 STL 的 all_of
+//}
 
 // 添加联系人
 void addContact() {
@@ -88,19 +120,20 @@ void addContact() {
     cin.ignore(); // 忽略上一个输入后的换行符
 
     // 验证电话号码输入
+
     while (true) {
         cout << prompts[language][1];  // 请输入电话
-        getline(cin, newContact.phone); // 使用getline读取电话
+        getline(cin, newContact.phone); // 使用getline读取电话.专门用于读取一整行输入cin，包括空格,放入后者中
 
         // 检查电话输入是否为纯数字
         bool validPhone = true;
         for (char c : newContact.phone) {
-            if (!isdigit(c)) {
+            if (!isdigit(c))//isdigit：标准库函数，用于检查一个字符是否为数字字符
+            {
                 validPhone = false;
                 break;
             }
         }
-
         if (validPhone) {
             break;  // 输入合法，退出循环
         }
@@ -108,6 +141,16 @@ void addContact() {
             cout << (language == 0 ? "无效的电话号码，请输入数字。" : "Invalid phone number. Please enter only numbers.") << endl;
         }
     }
+    //while (true) {
+//    cin >> newContact.phone;
+//    if (isValidPhone(newContact.phone)) {
+//        break;  // 输入合法，退出循环
+//    }
+//    else {
+//        cout << (language == 0 ? "无效的电话号码，请输入数字。" : "Invalid phone number. Please enter only numbers.") << endl;
+//        cout << prompts[language][1];  // 再次提示输入电话
+//    }
+//}
 
     cout << prompts[language][2];  // 请输入地址
     getline(cin, newContact.addr); // 使用getline读取地址
@@ -120,24 +163,25 @@ void addContact() {
         }
         break;
     }
-
-    cout << prompts[language][4];  // 请输入性别
-    int gender = 0;
+    
+    getGender(newContact);  //添加性别
+   /* int gender = 0;
     while (true) {
         cin >> gender;
-        if (!validateInput()) {
+        if (!validateinput()) {
             continue;
         }
         if (gender == 1) {
-            newContact.gender = language == 0 ? "男" : "male";
+            newcontact.gender = language == 0 ? "男" : "male";
             break;
         }
         else if (gender == 2) {
-            newContact.gender = language == 0 ? "女" : "female";
+            newcontact.gender = language == 0 ? "女" : "female";
             break;
         }
-        cout << (language == 0 ? "无效输入，请输入1或2。" : "Invalid input. Please enter 1 or 2.") << endl;
-    }
+        cout << (language == 0 ? "无效输入，请输入1或2。" : "invalid input. please enter 1 or 2.") << endl;
+    }*/
+
 
     contacts.push_back(newContact);
     cout << prompts[language][5] << endl;  // 联系人添加成功
@@ -197,7 +241,8 @@ void findContact() {
     cout << (language == 0 ? "请输入要查找的联系人姓名: " : "Enter the name of the contact you want to find: ");
     cin >> nameToFind;
     bool found = false;
-    for (const auto& contact : contacts) {
+    for (const auto& contact : contacts)//const：表示 contact 是只读的。auto：自动类型推导。&：表示 contact 是通过引用获取的，而不是值传递
+    {
         if (contact.name == nameToFind) {
             found = true;
             cout << (language == 0 ? "姓名：" : "name: ") << contact.name 
@@ -272,27 +317,28 @@ void editContact() {
             getline(cin, newAddr);
             if (!newAddr.empty()) contact.addr = newAddr;
 
-            // 修改性别，循环直到输入正确
-            while (true) {
-                cout << (language == 0 ? "请输入新性别 (1: 男, 2: 女) 或按Enter键保持不变: "
-                    : "Enter new gender (1 for male, 2 for female, or press Enter to keep current): ");
-                string genderInput;
-                getline(cin, genderInput);
-                if (genderInput.empty()) {
-                    break;  // 按 Enter，保持当前性别
-                }
-                if (genderInput == "1") {
-                    contact.gender = language == 0 ? "男" : "male";
-                    break;
-                }
-                else if (genderInput == "2") {
-                    contact.gender = language == 0 ? "女" : "female";
-                    break;
-                }
-                else {
-                    cout << (language == 0 ? "无效输入，请输入1或2。" : "Invalid input. Please enter 1 or 2.") << endl;
-                }
-            }
+            //// 修改性别，循环直到输入正确
+            getGender(contact);
+            //while (true) {
+            //    cout << (language == 0 ? "请输入新性别 (1: 男, 2: 女) 或按enter键保持不变: "
+            //        : "enter new gender (1 for male, 2 for female, or press enter to keep current): ");
+            //    string genderinput;
+            //    getline(cin, genderinput);
+            //    if (genderinput.empty()) {
+            //        break;  // 按 enter，保持当前性别
+            //    }
+            //    if (genderinput == "1") {
+            //        contact.gender = language == 0 ? "男" : "male";
+            //        break;
+            //    }
+            //    else if (genderinput == "2") {
+            //        contact.gender = language == 0 ? "女" : "female";
+            //        break;
+            //    }
+            //    else {
+            //        cout << (language == 0 ? "无效输入，请输入1或2。" : "invalid input. please enter 1 or 2.") << endl;
+            //    }
+            //}
 
             // 修改年龄
             cout << (language == 0 ? "请输入新年龄（按Enter键保持不变）: " : "Enter new age (or press Enter to keep current): ");
